@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
@@ -15,12 +14,17 @@ namespace NV.Magnum.App
     public partial class App : Application
     {
         private TaskbarIcon _icon;
+        private Kernel _kernel;
 
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
 
+            _kernel = new Kernel();
+            _kernel.Run();
+
             _icon = (TaskbarIcon) FindResource("TaskbarIcon");
+
         }
 
         protected override void OnExit(ExitEventArgs e)
