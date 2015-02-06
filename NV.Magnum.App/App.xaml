@@ -5,6 +5,6 @@
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
          <tb:TaskbarIcon x:Key="TaskbarIcon"
-                         IconSource="Resources/magnum.ico"/>
+                         IconSource="Resources/revolver-icon.ico"/>
     </Application.Resources>
 </Application>
