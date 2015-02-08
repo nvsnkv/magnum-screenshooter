@@ -15,18 +15,15 @@ namespace NV.Magnum.App.HotKey
         [DllImport("User32.dll", SetLastError = true)]
         private static extern bool RegisterHotKey([In] IntPtr hWnd, [In] int id, [In] uint fsModifiers, [In] uint vk);
 
-        [DllImport("User32.dll")]
+        [DllImport("User32.dll", SetLastError = true)]
         private static extern bool UnregisterHotKey([In] IntPtr hWnd, [In] int id);
 
-        private readonly HwndSource _source;
-        private readonly WindowInteropHelper _helper;
+        private readonly InvisibleWindow _window;
 
         public HotKeyMonitor(InvisibleWindow window)
         {
             if (window == null) throw new ArgumentNullException("window");
-            
-            _helper = window.Helper;
-            _source = HwndSource.FromHwnd(_helper.Handle);
+            _window = window;
         }
 
         public event Action HotKeyPressed;
@@ -35,9 +32,9 @@ namespace NV.Magnum.App.HotKey
         {
             if (IsRunning) return;
 
-            _source.AddHook(HotKeyHook);
-            
-            if (!RegisterHotKey(_helper.Handle, HOTKEY_ID, MOD_ALT, VK_SNAPSHOT))
+            _window.AddHook(HotKeyHook);
+
+            if (!RegisterHotKey(_window.Handle, HOTKEY_ID, MOD_ALT, VK_SNAPSHOT))
             {
                 var err = Marshal.GetLastWin32Error();
                 throw new InvalidOperationException(string.Format("Unable to register hotkey (Error code 0x{0:X})", err), new Win32Exception(err));
@@ -71,8 +68,8 @@ namespace NV.Magnum.App.HotKey
             if (!IsRunning)
                 return;
 
-            _source.RemoveHook(HotKeyHook);
-            if (!UnregisterHotKey(_helper.Handle, HOTKEY_ID))
+            _window.RemoveHook(HotKeyHook);
+            if (!UnregisterHotKey(_window.Handle, HOTKEY_ID))
             {
                 var err = Marshal.GetLastWin32Error();
                 throw new InvalidOperationException(string.Format("Unable to unregister hotkey (Error code 0x{0:X})", err), new Win32Exception(err));

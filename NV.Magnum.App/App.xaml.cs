@@ -21,7 +21,7 @@ namespace NV.Magnum.App
         {
             base.OnStartup(e);
 
-            var hotkeyWindow = (Window)FindResource("HotKeyMonitorWindow");
+            var hotkeyWindow = (InvisibleWindow)FindResource("HotKeyMonitorWindow");
             hotkeyWindow.Show();
 
             var monitor = new HotKeyMonitor(hotkeyWindow);

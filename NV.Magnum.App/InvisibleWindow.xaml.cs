@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 
@@ -11,29 +12,50 @@ namespace NV.Magnum.App
     /// </summary>
     public partial class InvisibleWindow : Window
     {
+        private WindowInteropHelper _helper;
+        private HwndSource _source;
         private const int GWL_EXSTYLE = -20;
         private const int WS_EX_TOOLWINDOW = 0x00000080;
-
+        
         public InvisibleWindow()
         {
             InitializeComponent();
-            Helper = new WindowInteropHelper(this);
         }
 
-        public WindowInteropHelper Helper { get; private set; }
+        public IntPtr Handle
+        {
+            get { return _helper.Handle; }
+        }
+
+        public void AddHook(HwndSourceHook hook)
+        {
+            _source.AddHook(hook);
+        }
+
+        public void RemoveHook(HwndSourceHook hook)
+        {
+            _source.RemoveHook(hook);
+        }
+
+        public void Initialize()
+        {
+            Show();
+            _helper = new WindowInteropHelper(this);
+            _source = HwndSource.FromHwnd(_helper.Handle);
+        }
 
         private void InvisibleWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            var exStyle = (int)GetWindowLong(Helper.Handle, GWL_EXSTYLE);
+            var exStyle = (int)GetWindowLong(Handle, GWL_EXSTYLE);
 
             exStyle |= WS_EX_TOOLWINDOW;
-            SetWindowLong(Helper.Handle, GWL_EXSTYLE, (IntPtr)exStyle);
+            SetWindowLong(Handle, GWL_EXSTYLE, (IntPtr)exStyle);
         }
 
         [DllImport("user32.dll")]
-        public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+        private static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
 
-        public static IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
+        private static IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
         {
             var error = 0;
             IntPtr result;
