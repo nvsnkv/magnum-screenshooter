@@ -1,5 +1,5 @@
 ﻿using System;
-using NV.Magnum.App.HotKeyMonitor;
+using NV.Magnum.App.HotKey;
 
 namespace NV.Magnum.App
 {
