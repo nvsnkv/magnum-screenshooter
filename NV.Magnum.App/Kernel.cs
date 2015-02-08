@@ -4,11 +4,19 @@ namespace NV.Magnum.App
 {
     internal class Kernel : IDisposable
     {
-        public void Run()
+        public bool IsRunning { get; private set; }
+
+        public void Start()
         {
-            
+            IsRunning = true;
         }
 
+        public void Stop()
+        {
+            IsRunning = false;
+        }
+
+        #region IDisposable
         public void Dispose()
         {
             Dispose(true);
@@ -16,9 +24,8 @@ namespace NV.Magnum.App
 
         protected void Dispose(bool disposing)
         {
-            
-        }
 
-        public bool IsRunning { get; private set; }
+        }
+        #endregion
     }
 }

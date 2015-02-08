@@ -21,7 +21,7 @@ namespace NV.Magnum.App
             base.OnStartup(e);
 
             _kernel = new Kernel();
-            _kernel.Run();
+            _kernel.Start();
 
             _icon = (TaskbarIcon) FindResource("TaskbarIcon");
 
