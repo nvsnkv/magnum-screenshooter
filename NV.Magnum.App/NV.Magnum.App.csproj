@@ -62,7 +62,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HotKeyMonitor\IHotKeyMonitor.cs" />
+    <Compile Include="HotKey\HotKeyMonitor.cs" />
+    <Compile Include="HotKey\IHotKeyMonitor.cs" />
+    <Compile Include="InvisibleWindow.xaml.cs">
+      <DependentUpon>InvisibleWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Kernel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -75,6 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\revolver-icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="InvisibleWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

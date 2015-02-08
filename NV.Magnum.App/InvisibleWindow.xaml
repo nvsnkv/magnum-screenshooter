@@ -1,0 +1,7 @@
+﻿<Window x:Class="NV.Magnum.App.InvisibleWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Top="10000" Left="10000" Width="0" Height="0"
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowState="Minimized" ShowInTaskbar="False"
+        Loaded="InvisibleWindow_OnLoaded"/>

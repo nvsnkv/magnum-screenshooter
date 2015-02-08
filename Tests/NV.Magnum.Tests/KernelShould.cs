@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using NV.Magnum.App;
-using NV.Magnum.App.HotKeyMonitor;
+using NV.Magnum.App.HotKey;
 
 namespace NV.Magnum.Tests
 {

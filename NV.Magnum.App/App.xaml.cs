@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
+using NV.Magnum.App.HotKey;
 
 namespace NV.Magnum.App
 {
@@ -20,7 +21,13 @@ namespace NV.Magnum.App
         {
             base.OnStartup(e);
 
-            _kernel = new Kernel();
+            var hotkeyWindow = (Window)FindResource("HotKeyMonitorWindow");
+            hotkeyWindow.Show();
+
+            var monitor = new HotKeyMonitor(hotkeyWindow);
+            monitor.HotKeyPressed += () => MessageBox.Show("HotKey was pressed!");
+
+            _kernel = new Kernel {HotKeyMonitor = monitor};
             _kernel.Start();
 
             _icon = (TaskbarIcon) FindResource("TaskbarIcon");
