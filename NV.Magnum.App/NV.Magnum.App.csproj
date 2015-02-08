@@ -62,6 +62,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HotKeyMonitor\IHotKeyMonitor.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
