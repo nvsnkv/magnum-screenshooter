@@ -4,4 +4,6 @@
         Top="10000" Left="10000" Width="0" Height="0"
         WindowStyle="None" ResizeMode="NoResize"
         WindowState="Minimized" ShowInTaskbar="False"
-        Loaded="InvisibleWindow_OnLoaded"/>
+        ShowActivated="False" Visibility="Hidden"
+        Loaded="InvisibleWindow_OnLoaded"
+/>

@@ -22,10 +22,10 @@ namespace NV.Magnum.App
             base.OnStartup(e);
 
             var hotkeyWindow = (InvisibleWindow)FindResource("HotKeyMonitorWindow");
-            hotkeyWindow.Show();
+            hotkeyWindow.Initialize();
 
             var monitor = new HotKeyMonitor(hotkeyWindow);
-            monitor.HotKeyPressed += () => MessageBox.Show("HotKey was pressed!");
+            monitor.HotKeyPressed += (o,args) => MessageBox.Show("HotKey was pressed!");
 
             _kernel = new Kernel {HotKeyMonitor = monitor};
             _kernel.Start();
