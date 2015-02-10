@@ -62,8 +62,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Screen\IScreenCather.cs" />
+    <Compile Include="Screen\IScreenshot.cs" />
     <Compile Include="Screen\ScreenCather.cs" />
     <Compile Include="Screen\ScreenshotCreatedEventArgs.cs" />
+    <Compile Include="Storage\FileStorage.cs" />
+    <Compile Include="Storage\IStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HotKey\HotKeyMonitor.cs" />

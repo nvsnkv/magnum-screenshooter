@@ -2,13 +2,14 @@
 using Hardcodet.Wpf.TaskbarNotification;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
+using NV.Magnum.App.Storage;
 
 namespace NV.Magnum.App
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Tell this to WPF team, OK?")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "All disposables will be disposed OnExit")]
     public partial class App : Application
     {
         private TaskbarIcon _icon;
@@ -24,7 +25,7 @@ namespace NV.Magnum.App
             var monitor = new HotKeyMonitor(hotkeyWindow);
             monitor.HotKeyPressed += (o,args) => MessageBox.Show("HotKey was pressed!");
 
-            _kernel = new Kernel(monitor,new ScreenCather());
+            _kernel = new Kernel(monitor,new ScreenCather(), new FileStorage());
             _kernel.Start();
 
             _icon = (TaskbarIcon) FindResource("TaskbarIcon");

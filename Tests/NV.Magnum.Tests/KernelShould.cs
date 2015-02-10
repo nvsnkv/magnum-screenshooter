@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NV.Magnum.App;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
+using NV.Magnum.App.Storage;
 
 namespace NV.Magnum.Tests
 {
@@ -20,6 +21,7 @@ namespace NV.Magnum.Tests
         {
             public readonly Mock<IHotKeyMonitor> HotKeyMonitor = new Mock<IHotKeyMonitor>();
             public readonly Mock<IScreenCather> ScreenCatcher = new Mock<IScreenCather>();
+            public readonly Mock<IStorage> Storage = new Mock<IStorage>();
         }
 
         private Mocks _mocks;
@@ -30,7 +32,7 @@ namespace NV.Magnum.Tests
         public void CreateKernel()
         {
             _mocks = new Mocks();
-            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object);
+            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object, _mocks.Storage.Object);
         }
 
         [TearDown]
@@ -117,6 +119,36 @@ namespace NV.Magnum.Tests
 
             monitor.Raise(m => m.HotKeyPressed += null, EventArgs.Empty);
             catcher.Verify(c => c.TakePicture(), Times.Never);
+        }
+
+        [Test, Category("Storage")]
+        public void CallStorageStoreWhenScreenshotCatherCathesAScreenshot()
+        {
+            var expectedScreenshot = new Mock<IScreenshot>().Object;
+
+            var storage = _mocks.Storage;
+            var catcher = _mocks.ScreenCatcher;
+            storage.Setup(s => s.Store(expectedScreenshot));
+
+            _kernel.Start();
+            catcher.Raise(c => c.ScreenshotCreated += null, new ScreenshotCreatedEventArgs(expectedScreenshot));
+
+            storage.Verify(s => s.Store(expectedScreenshot), Times.Once);
+        }
+
+        [Test, Category("Storage")]
+        public void NotCallStorageStoreWhenStopped()
+        {
+            var storage = _mocks.Storage;
+            var catcher = _mocks.ScreenCatcher;
+            storage.Setup(s => s.Store(It.IsAny<IScreenshot>()));
+
+            _kernel.Start();
+            _kernel.Stop();
+
+            catcher.Raise(c => c.ScreenshotCreated += null, new ScreenshotCreatedEventArgs(new Mock<IScreenshot>().Object));
+
+            storage.Verify(s => s.Store(It.IsAny<IScreenshot>()), Times.Never);
         }
     }
 }
