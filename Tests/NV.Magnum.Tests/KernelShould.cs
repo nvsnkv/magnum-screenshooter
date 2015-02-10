@@ -14,12 +14,21 @@ namespace NV.Magnum.Tests
     public class KernelShould
     {
         #region Setup
+
+        private class Mocks
+        {
+            public readonly Mock<IHotKeyMonitor> HotKeyMonitor = new Mock<IHotKeyMonitor>();
+        }
+
+        private Mocks _mocks;
         private Kernel _kernel;
+        
 
         [SetUp]
         public void CreateKernel()
         {
-            _kernel = new Kernel();
+            _mocks = new Mocks();
+            _kernel = new Kernel(_mocks.HotKeyMonitor.Object);
         }
 
         [TearDown]
@@ -27,13 +36,13 @@ namespace NV.Magnum.Tests
         {
             _kernel.Dispose();
             _kernel = null;
+            _mocks = null;
         } 
         #endregion
 
         [Test]
         public void SetIsRunningAfterSuccessfulStart()
         {
-            _kernel.HotKeyMonitor = new Mock<IHotKeyMonitor>().Object;
             _kernel.Start();
 
             Assert.That(_kernel.IsRunning, Is.True);
@@ -42,7 +51,6 @@ namespace NV.Magnum.Tests
         [Test]
         public void UnsetIsRunningAfterSuccessfulStop()
         {
-            _kernel.HotKeyMonitor = new Mock<IHotKeyMonitor>().Object;
             _kernel.Start();
 
             _kernel.Stop();
@@ -55,19 +63,13 @@ namespace NV.Magnum.Tests
             Assert.That(_kernel.IsRunning, Is.False);
         }
 
-        [Test, Category("HotKeyMonitor")]
-        public void NotStartWhenHotKeyMonitorIsMissing()
-        {
-            Assert.Throws<InvalidOperationException>(() => _kernel.Start());
-        }
-
+        
         [Test, Category("HotKeyMonitor")]
         public void StartHotKeyMonitorOnceWhenStarted()
         {
-            var mock = new Mock<IHotKeyMonitor>();
+            var mock = _mocks.HotKeyMonitor;
             mock.Setup(m => m.Start()).Verifiable();
-            _kernel.HotKeyMonitor = mock.Object;
-
+            
             _kernel.Start();
             _kernel.Start();
 
@@ -77,25 +79,15 @@ namespace NV.Magnum.Tests
         [Test, Category("HotKeyMonitor")]
         public void StoptHotKeyMonitorOnceWhenStopped()
         {
-            var mock = new Mock<IHotKeyMonitor>();
+            var mock = _mocks.HotKeyMonitor;
             mock.Setup(m => m.Stop()).Verifiable();
-            _kernel.HotKeyMonitor = mock.Object;
-
+            
             _kernel.Start();
             
             _kernel.Stop();
             _kernel.Stop();
 
             mock.Verify(m => m.Stop(), Times.Once);
-        }
-
-        [Test, Category("HotKeyMonitor")]
-        public void ForbidHotKeyMonitorModificationWhenRunning()
-        {
-            _kernel.HotKeyMonitor = new Mock<IHotKeyMonitor>().Object;
-            _kernel.Start();
-
-            Assert.Throws<InvalidOperationException>(() => _kernel.HotKeyMonitor = new Mock<IHotKeyMonitor>().Object);
         }
     }
 }

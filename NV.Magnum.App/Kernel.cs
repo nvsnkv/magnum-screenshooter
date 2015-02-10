@@ -5,29 +5,23 @@ namespace NV.Magnum.App
 {
     internal class Kernel : IDisposable
     {
-        private IHotKeyMonitor _hotKeyMonitor;
-        public bool IsRunning { get; private set; }
+        private readonly IHotKeyMonitor _hotKeyMonitor;
 
-        public IHotKeyMonitor HotKeyMonitor
+        public Kernel(IHotKeyMonitor hotKeyMonitor)
         {
-            get { return _hotKeyMonitor; }
-            set
-            {
-                if (IsRunning)
-                    throw new InvalidOperationException("Unable to change HotKeyMonitor while running!");
-                _hotKeyMonitor = value;
-            }
+            if (hotKeyMonitor == null) throw new ArgumentNullException("hotKeyMonitor");
+
+            _hotKeyMonitor = hotKeyMonitor;
         }
+
+        public bool IsRunning { get; private set; }
 
         public void Start()
         {
             if (IsRunning)
                 return;
 
-            if (HotKeyMonitor == null)
-                throw new InvalidOperationException("Unable to start: HotKeyMonitor missing!");
-            
-            HotKeyMonitor.Start();
+            _hotKeyMonitor.Start();
             IsRunning = true;
         }
 
@@ -36,7 +30,7 @@ namespace NV.Magnum.App
             if (!IsRunning)
                 return;
 
-            HotKeyMonitor.Stop();
+            _hotKeyMonitor.Stop();
 
             IsRunning = false;
         }
