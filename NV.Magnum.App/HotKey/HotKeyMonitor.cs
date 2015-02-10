@@ -27,7 +27,7 @@ namespace NV.Magnum.App.HotKey
             _window = window;
         }
 
-        public event Action<object, EventArgs> HotKeyPressed;
+        public event EventHandler HotKeyPressed;
 
         public void Start()
         {

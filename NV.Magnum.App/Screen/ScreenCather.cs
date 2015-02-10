@@ -1,4 +1,6 @@
-﻿namespace NV.Magnum.App.Screen
+﻿using System;
+
+namespace NV.Magnum.App.Screen
 {
     internal class ScreenCather : IScreenCather
     {
@@ -6,5 +8,7 @@
         {
             throw new System.NotImplementedException();
         }
+
+        public event EventHandler<ScreenshotCreatedEventArgs> ScreenshotCreated;
     }
 }

@@ -8,6 +8,7 @@ namespace NV.Magnum.App
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Justification = "Tell this to WPF team, OK?")]
     public partial class App : Application
     {
         private TaskbarIcon _icon;
