@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using NV.Magnum.App;
 using NV.Magnum.App.HotKey;
+using NV.Magnum.App.Screen;
 
 namespace NV.Magnum.Tests
 {
@@ -18,6 +19,7 @@ namespace NV.Magnum.Tests
         private class Mocks
         {
             public readonly Mock<IHotKeyMonitor> HotKeyMonitor = new Mock<IHotKeyMonitor>();
+            public readonly Mock<IScreenCather> ScreenCatcher = new Mock<IScreenCather>();
         }
 
         private Mocks _mocks;
@@ -28,7 +30,7 @@ namespace NV.Magnum.Tests
         public void CreateKernel()
         {
             _mocks = new Mocks();
-            _kernel = new Kernel(_mocks.HotKeyMonitor.Object);
+            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object);
         }
 
         [TearDown]
@@ -88,6 +90,19 @@ namespace NV.Magnum.Tests
             _kernel.Stop();
 
             mock.Verify(m => m.Stop(), Times.Once);
+        }
+
+        [Test, Category("ScreenCather")]
+        public void CallScreenCatcherTakePictureAfterHotKeyMonitorHotKeyPressedWasRaised()
+        {
+            var monitor = _mocks.HotKeyMonitor;
+            var catcher = _mocks.ScreenCatcher;
+            catcher.Setup(c => c.TakePicture()).Verifiable();
+
+            _kernel.Start();
+
+            monitor.Raise(m => m.HotKeyPressed += null, EventArgs.Empty);
+            catcher.Verify(c => c.TakePicture(), Times.Once);
         }
     }
 }

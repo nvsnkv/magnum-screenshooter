@@ -61,6 +61,9 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Screen\IScreenCather.cs" />
+    <Compile Include="Screen\ScreenCather.cs" />
+    <Compile Include="Screen\ScreenshotCreatedEventArgs.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HotKey\HotKeyMonitor.cs" />
