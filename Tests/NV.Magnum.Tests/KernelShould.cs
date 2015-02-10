@@ -104,6 +104,20 @@ namespace NV.Magnum.Tests
             monitor.Raise(m => m.HotKeyPressed += null, EventArgs.Empty);
             catcher.Verify(c => c.TakePicture(), Times.Once);
         }
+
+        [Test, Category("ScreenCather")]
+        public void NotCallScreenCatcherTakePictureWhenStopped()
+        {
+            var monitor = _mocks.HotKeyMonitor;
+            var catcher = _mocks.ScreenCatcher;
+            catcher.Setup(c => c.TakePicture()).Verifiable();
+
+            _kernel.Start();
+            _kernel.Stop();
+
+            monitor.Raise(m => m.HotKeyPressed += null, EventArgs.Empty);
+            catcher.Verify(c => c.TakePicture(), Times.Never);
+        }
     }
 }
 
