@@ -18,7 +18,7 @@ namespace NV.Magnum.App.Storage
 
         public void Store(IScreenshot screenshot)
         {
-            var name = Guid.NewGuid().ToString();
+            var name = Guid.NewGuid() + ".jpg";
 
             File.WriteAllBytes(Path.Combine(_path, name),screenshot.Content);
         }

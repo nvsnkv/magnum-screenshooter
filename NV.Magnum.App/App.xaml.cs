@@ -41,8 +41,7 @@ namespace NV.Magnum.App
             hotkeyWindow.Initialize();
 
             var monitor = new HotKeyMonitor(hotkeyWindow);
-            monitor.HotKeyPressed += (o, args) => MessageBox.Show("HotKey was pressed!");
-
+            
             if (!Directory.Exists(screenshotsFolder))
                 Directory.CreateDirectory(screenshotsFolder);
 

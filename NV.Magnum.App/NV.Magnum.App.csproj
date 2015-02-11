@@ -51,6 +51,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -75,6 +76,7 @@
     <Compile Include="Screen\IScreenCather.cs" />
     <Compile Include="Screen\IScreenshot.cs" />
     <Compile Include="Screen\ScreenCather.cs" />
+    <Compile Include="Screen\Screenshot.cs" />
     <Compile Include="Screen\ScreenshotCreatedEventArgs.cs" />
     <Compile Include="Storage\FileStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />

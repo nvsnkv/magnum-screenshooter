@@ -40,7 +40,7 @@ namespace NV.Magnum.Tests
 
             var files = Directory.GetFiles(_storagePath);
             Assert.That(files.Count(), Is.EqualTo(1));
-
+            Assert.That(files.First(), Is.StringEnding(".jpg"));
             var file = new FileInfo(files.First());
             Assert.That(file.CreationTime, Is.GreaterThan(beforeSave));
             Assert.That(file.Length, Is.EqualTo(content.Length));
