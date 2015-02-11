@@ -3,10 +3,37 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:tb="http://www.hardcodet.net/taskbar"
              xmlns:app="clr-namespace:NV.Magnum.App"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:converters="clr-namespace:NV.Magnum.App.UI.Converters"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
-         <tb:TaskbarIcon x:Key="TaskbarIcon"
-                         IconSource="Resources/revolver-icon.ico"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <converters:InverseBooleanToVisibilityConverter x:Key="InverseBooleanToVisibilityConverter"/>
         <app:InvisibleWindow x:Key="HotKeyMonitorWindow" />
+        
+        <Style x:Key="TaryIconStyle" TargetType="{x:Type tb:TaskbarIcon}">
+            <Setter Property="IconSource" Value="Resources/revolver-icon.ico"/>
+            <Setter Property="ContextMenu">
+                <Setter.Value>
+                    <ContextMenu>
+                        <ContextMenu.Resources>
+                            <Image x:Key="ExitIcon" Source="Resources/exit.ico" Width="12" Height="12"/>
+                            <Image x:Key="PlayIcon" Source="Resources/play.ico" Width="12" Height="12"/>
+                            <Image x:Key="PauseIcon" Source="Resources/pause.ico" Width="12" Height="12"/>
+                            <Image x:Key="FoldderIcon" Source="Resources/folder.ico" Width="12" Height="12"/>
+                        </ContextMenu.Resources>
+                        <MenuItem Header="Start" Icon="{StaticResource PlayIcon}" 
+                              Visibility="{Binding Kernel.IsRunning, Converter={StaticResource InverseBooleanToVisibilityConverter}}"
+                              Command="{Binding Kernel.Run}"/>
+                        <MenuItem Header="Pause" Icon="{StaticResource PauseIcon}" 
+                              Visibility="{Binding Kernel.IsRunning, Converter={StaticResource BooleanToVisibilityConverter}}"
+                              Command="{Binding Kernel.Stop}"/>
+                        <MenuItem Header="See screenshots" Icon="{StaticResource FoldderIcon}" Command="{Binding OpenScreenshotsFolder}"></MenuItem>
+                        <Separator></Separator>
+                        <MenuItem Header="Exit" Icon="{StaticResource ExitIcon}" Command="{Binding Exit}"/>
+                    </ContextMenu>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>

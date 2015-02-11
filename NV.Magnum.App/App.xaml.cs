@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Configuration;
 using System.IO;
 using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
 using NV.Magnum.App.Storage;
+using NV.Magnum.App.UI.ViewModels;
 
 namespace NV.Magnum.App
 {
@@ -21,17 +23,33 @@ namespace NV.Magnum.App
         {
             base.OnStartup(e);
 
-            var hotkeyWindow = (InvisibleWindow)FindResource("HotKeyMonitorWindow");
+            var screenshotsFolder = ConfigurationManager.AppSettings["ScrenshotsFolder"] ?? "Screenshots";
+            
+            RunKernel(screenshotsFolder);
+
+            _icon = new TaskbarIcon
+            {
+                DataContext = new ContextMenuViewModel(screenshotsFolder) {Kernel = new KernelViewModel(_kernel)},
+                Style = (Style) FindResource("TaryIconStyle")
+            };
+
+        }
+
+        private void RunKernel(string screenshotsFolder)
+        {
+            var hotkeyWindow = (InvisibleWindow) FindResource("HotKeyMonitorWindow");
             hotkeyWindow.Initialize();
 
             var monitor = new HotKeyMonitor(hotkeyWindow);
-            monitor.HotKeyPressed += (o,args) => MessageBox.Show("HotKey was pressed!");
+            monitor.HotKeyPressed += (o, args) => MessageBox.Show("HotKey was pressed!");
 
-            _kernel = new Kernel(monitor,new ScreenCather(), new FileStorage(Environment.CurrentDirectory));
+            if (!Directory.Exists(screenshotsFolder))
+                Directory.CreateDirectory(screenshotsFolder);
+
+            var fileStorage = new FileStorage(screenshotsFolder);
+
+            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage);
             _kernel.Start();
-
-            _icon = (TaskbarIcon) FindResource("TaskbarIcon");
-
         }
 
         protected override void OnExit(ExitEventArgs e)
