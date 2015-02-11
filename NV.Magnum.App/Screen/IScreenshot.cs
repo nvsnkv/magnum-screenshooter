@@ -2,6 +2,6 @@
 {
     public interface IScreenshot
     {
-         
+        byte[] Content { get; }
     }
 }
