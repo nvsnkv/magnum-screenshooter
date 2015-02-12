@@ -8,6 +8,7 @@ using NUnit.Framework;
 using NV.Magnum.App;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
+using NV.Magnum.App.Server;
 using NV.Magnum.App.Storage;
 
 namespace NV.Magnum.Tests
@@ -22,6 +23,7 @@ namespace NV.Magnum.Tests
             public readonly Mock<IHotKeyMonitor> HotKeyMonitor = new Mock<IHotKeyMonitor>();
             public readonly Mock<IScreenCather> ScreenCatcher = new Mock<IScreenCather>();
             public readonly Mock<IStorage> Storage = new Mock<IStorage>();
+            public readonly Mock<IServer> Server = new Mock<IServer>();
         }
 
         private Mocks _mocks;
@@ -32,7 +34,7 @@ namespace NV.Magnum.Tests
         public void CreateKernel()
         {
             _mocks = new Mocks();
-            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object, _mocks.Storage.Object);
+            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object, _mocks.Storage.Object, _mocks.Server.Object);
         }
 
         [TearDown]
@@ -88,6 +90,32 @@ namespace NV.Magnum.Tests
             
             _kernel.Start();
             
+            _kernel.Stop();
+            _kernel.Stop();
+
+            mock.Verify(m => m.Stop(), Times.Once);
+        }
+
+        [Test, Category("Server")]
+        public void StartServerOnceWhenStarted()
+        {
+            var mock = _mocks.Server;
+            mock.Setup(m => m.Start()).Verifiable();
+
+            _kernel.Start();
+            _kernel.Start();
+
+            mock.Verify(m => m.Start(), Times.Once);
+        }
+
+        [Test, Category("Server")]
+        public void StoptServerOnceWhenStopped()
+        {
+            var mock = _mocks.HotKeyMonitor;
+            mock.Setup(m => m.Stop()).Verifiable();
+
+            _kernel.Start();
+
             _kernel.Stop();
             _kernel.Stop();
 

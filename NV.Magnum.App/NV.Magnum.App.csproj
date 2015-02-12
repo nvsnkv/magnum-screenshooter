@@ -78,6 +78,7 @@
     <Compile Include="Screen\ScreenCather.cs" />
     <Compile Include="Screen\Screenshot.cs" />
     <Compile Include="Screen\ScreenshotCreatedEventArgs.cs" />
+    <Compile Include="Server\IServer.cs" />
     <Compile Include="Storage\FileStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />
     <Compile Include="UI\Converters\InverseBooleanToVisibilityConverter.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
+using NV.Magnum.App.Server;
 using NV.Magnum.App.Storage;
 
 namespace NV.Magnum.App
@@ -10,16 +11,19 @@ namespace NV.Magnum.App
         private readonly IHotKeyMonitor _hotKeyMonitor;
         private readonly IScreenCather _screenCather;
         private readonly IStorage _storage;
+        private readonly IServer _server;
 
-        public Kernel(IHotKeyMonitor hotKeyMonitor, IScreenCather screenCather, IStorage storage)
+        public Kernel(IHotKeyMonitor hotKeyMonitor, IScreenCather screenCather, IStorage storage, IServer server)
         {
             if (hotKeyMonitor == null) throw new ArgumentNullException("hotKeyMonitor");
             if (screenCather == null) throw new ArgumentNullException("screenCather");
             if (storage == null) throw new ArgumentNullException("storage");
+            if (server == null) throw new ArgumentNullException("server");
 
             _hotKeyMonitor = hotKeyMonitor;
             _screenCather = screenCather;
             _storage = storage;
+            _server = server;
         }
 
         public bool IsRunning { get; private set; }
@@ -31,6 +35,7 @@ namespace NV.Magnum.App
 
             _hotKeyMonitor.HotKeyPressed += HotKeyMonitorOnHotKeyPressed;
             _screenCather.ScreenshotCreated += ScreenCatherOnScreenshotCreated;
+            _server.Start();
             _hotKeyMonitor.Start();
             IsRunning = true;
         }
@@ -41,6 +46,7 @@ namespace NV.Magnum.App
                 return;
 
             _hotKeyMonitor.Stop();
+            _server.Stop();
             _hotKeyMonitor.HotKeyPressed -= HotKeyMonitorOnHotKeyPressed;
             _screenCather.ScreenshotCreated -= ScreenCatherOnScreenshotCreated;
 

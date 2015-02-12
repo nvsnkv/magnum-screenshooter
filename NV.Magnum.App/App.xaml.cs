@@ -47,7 +47,7 @@ namespace NV.Magnum.App
 
             var fileStorage = new FileStorage(screenshotsFolder);
 
-            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage);
+            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage, /*TODO*/null);
             _kernel.Start();
         }
 
