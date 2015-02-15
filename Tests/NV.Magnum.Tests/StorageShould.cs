@@ -45,5 +45,24 @@ namespace NV.Magnum.Tests
             Assert.That(file.CreationTime, Is.GreaterThan(beforeSave));
             Assert.That(file.Length, Is.EqualTo(content.Length));
         }
+
+        [Test, Category("Integration")]
+        public void RaiseScreenshotStoredWhenScreenshotWasStored()
+        {
+            var content = new byte[2 * 1024 * 1024];
+            var rnd = new Random();
+            rnd.NextBytes(content);
+
+            var screenshot = new Mock<IScreenshot>();
+            screenshot.Setup(s => s.Content).Returns(content);
+
+            var screenshotStoredRaised = false;
+            var storage = new FileStorage(_storagePath);
+            storage.ScreenshotStored += (o, e) => screenshotStoredRaised = true;
+
+            storage.Store(screenshot.Object);
+
+            Assert.That(screenshotStoredRaised, Is.EqualTo(true));
+        }
     }
 }

@@ -21,6 +21,16 @@ namespace NV.Magnum.App.Storage
             var name = Guid.NewGuid() + ".jpg";
 
             File.WriteAllBytes(Path.Combine(_path, name),screenshot.Content);
+
+            RaiseScreenshotStored(new ScreenshotStoredEventArgs(name));
+        }
+
+        public event EventHandler<ScreenshotStoredEventArgs> ScreenshotStored;
+
+        protected virtual void RaiseScreenshotStored(ScreenshotStoredEventArgs e)
+        {
+            var handler = ScreenshotStored;
+            if (handler != null) handler(this, e);
         }
     }
 }

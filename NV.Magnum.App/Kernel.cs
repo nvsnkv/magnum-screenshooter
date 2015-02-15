@@ -1,4 +1,5 @@
 ﻿using System;
+using NV.Magnum.App.Clipboard;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
 using NV.Magnum.App.Server;
@@ -12,18 +13,21 @@ namespace NV.Magnum.App
         private readonly IScreenCather _screenCather;
         private readonly IStorage _storage;
         private readonly IServer _server;
+        private readonly IClipboardManager _clipboardManager;
 
-        public Kernel(IHotKeyMonitor hotKeyMonitor, IScreenCather screenCather, IStorage storage, IServer server)
+        public Kernel(IHotKeyMonitor hotKeyMonitor, IScreenCather screenCather, IStorage storage, IServer server, IClipboardManager clipboardManager)
         {
             if (hotKeyMonitor == null) throw new ArgumentNullException("hotKeyMonitor");
             if (screenCather == null) throw new ArgumentNullException("screenCather");
             if (storage == null) throw new ArgumentNullException("storage");
             if (server == null) throw new ArgumentNullException("server");
+            if (clipboardManager == null) throw new ArgumentNullException("clipboardManager");
 
             _hotKeyMonitor = hotKeyMonitor;
             _screenCather = screenCather;
             _storage = storage;
             _server = server;
+            _clipboardManager = clipboardManager;
         }
 
         public bool IsRunning { get; private set; }
@@ -35,6 +39,7 @@ namespace NV.Magnum.App
 
             _hotKeyMonitor.HotKeyPressed += HotKeyMonitorOnHotKeyPressed;
             _screenCather.ScreenshotCreated += ScreenCatherOnScreenshotCreated;
+            _storage.ScreenshotStored += StorageOnScreenshotStored;
             _server.Start();
             _hotKeyMonitor.Start();
             IsRunning = true;
@@ -49,6 +54,7 @@ namespace NV.Magnum.App
             _server.Stop();
             _hotKeyMonitor.HotKeyPressed -= HotKeyMonitorOnHotKeyPressed;
             _screenCather.ScreenshotCreated -= ScreenCatherOnScreenshotCreated;
+            _storage.ScreenshotStored -= StorageOnScreenshotStored;
 
             IsRunning = false;
         }
@@ -62,8 +68,14 @@ namespace NV.Magnum.App
         {
             _storage.Store(e.Screenshot);
         }
-        
+
+        private void StorageOnScreenshotStored(object sender, ScreenshotStoredEventArgs e)
+        {
+            _clipboardManager.Set(e.Name);
+        }
+
         #region IDisposable
+
         public void Dispose()
         {
             Dispose(true);

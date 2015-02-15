@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using NV.Magnum.App;
+using NV.Magnum.App.Clipboard;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
 using NV.Magnum.App.Server;
@@ -24,6 +25,7 @@ namespace NV.Magnum.Tests
             public readonly Mock<IScreenCather> ScreenCatcher = new Mock<IScreenCather>();
             public readonly Mock<IStorage> Storage = new Mock<IStorage>();
             public readonly Mock<IServer> Server = new Mock<IServer>();
+            public readonly Mock<IClipboardManager> ClipboardManager = new Mock<IClipboardManager>();
         }
 
         private Mocks _mocks;
@@ -34,7 +36,7 @@ namespace NV.Magnum.Tests
         public void CreateKernel()
         {
             _mocks = new Mocks();
-            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object, _mocks.Storage.Object, _mocks.Server.Object);
+            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object, _mocks.Storage.Object, _mocks.Server.Object, _mocks.ClipboardManager.Object);
         }
 
         [TearDown]
@@ -177,6 +179,37 @@ namespace NV.Magnum.Tests
             catcher.Raise(c => c.ScreenshotCreated += null, new ScreenshotCreatedEventArgs(new Mock<IScreenshot>().Object));
 
             storage.Verify(s => s.Store(It.IsAny<IScreenshot>()), Times.Never);
+        }
+
+        [Test, Category("Clipboard")]
+        public void CallCLipboardManagerSetWhenStorageStoresAScreenshot()
+        {
+            const string NAME = "Screenshot1";
+
+            var manager = _mocks.ClipboardManager;
+            manager.Setup(m => m.Set(NAME)).Verifiable();
+
+            var storage = _mocks.Storage;
+            _kernel.Start();
+
+            storage.Raise(s => s.ScreenshotStored += null, new ScreenshotStoredEventArgs(NAME));
+
+            manager.Verify(m => m.Set(NAME), Times.Once);
+        }
+
+        [Test, Category("Clipboard")]
+        public void NotCallCLipboardManagerSetWhenStopped()
+        {
+            const string NAME = "Screenshot1";
+
+            var manager = _mocks.ClipboardManager;
+            manager.Setup(m => m.Set(NAME)).Verifiable();
+
+            var storage = _mocks.Storage;
+            
+            storage.Raise(s => s.ScreenshotStored += null, new ScreenshotStoredEventArgs(NAME));
+
+            manager.Verify(m => m.Set(NAME), Times.Never);
         }
     }
 }

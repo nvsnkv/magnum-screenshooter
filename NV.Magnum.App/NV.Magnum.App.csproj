@@ -83,6 +83,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Clipboard\IClipboardManager.cs" />
     <Compile Include="Screen\IScreenCather.cs" />
     <Compile Include="Screen\IScreenshot.cs" />
     <Compile Include="Screen\ScreenCather.cs" />
@@ -92,6 +93,7 @@
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Storage\FileStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />
+    <Compile Include="Storage\ScreenshotStoredEventArgs.cs" />
     <Compile Include="UI\Converters\InverseBooleanToVisibilityConverter.cs" />
     <Compile Include="UI\ViewModels\ContextMenuViewModel.cs" />
     <Compile Include="UI\ViewModels\KernelViewModel.cs" />

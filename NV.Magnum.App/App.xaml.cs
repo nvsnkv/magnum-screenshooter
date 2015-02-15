@@ -51,7 +51,7 @@ namespace NV.Magnum.App
 
             var fileStorage = new FileStorage(screenshotsFolder);
 
-            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage, new EmbedIOServer(port, screenshotsFolder));
+            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage, new EmbedIOServer(port, screenshotsFolder), null);
             _kernel.Start();
         }
 
