@@ -5,6 +5,7 @@ using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
+using NV.Magnum.App.Server;
 using NV.Magnum.App.Storage;
 using NV.Magnum.App.UI.ViewModels;
 
@@ -24,8 +25,11 @@ namespace NV.Magnum.App
             base.OnStartup(e);
 
             var screenshotsFolder = ConfigurationManager.AppSettings["ScrenshotsFolder"] ?? "Screenshots";
+            int port;
+            int.TryParse(ConfigurationManager.AppSettings["ServerPort"], out port);
+            if (port == default(int)) port = 33026;
             
-            RunKernel(screenshotsFolder);
+            RunKernel(screenshotsFolder, port);
 
             _icon = new TaskbarIcon
             {
@@ -35,7 +39,7 @@ namespace NV.Magnum.App
 
         }
 
-        private void RunKernel(string screenshotsFolder)
+        private void RunKernel(string screenshotsFolder, int port)
         {
             var hotkeyWindow = (InvisibleWindow) FindResource("HotKeyMonitorWindow");
             hotkeyWindow.Initialize();
@@ -47,7 +51,7 @@ namespace NV.Magnum.App
 
             var fileStorage = new FileStorage(screenshotsFolder);
 
-            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage, /*TODO*/null);
+            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage, new EmbedIOServer(port, screenshotsFolder));
             _kernel.Start();
         }
 
