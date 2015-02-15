@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace NV.Magnum.App
+namespace NV.Magnum.App.HotKey
 {
     /// <summary>
     /// Interaction logic for InvisibleWindow.xaml

@@ -99,7 +99,7 @@
   <ItemGroup>
     <Compile Include="HotKey\HotKeyMonitor.cs" />
     <Compile Include="HotKey\IHotKeyMonitor.cs" />
-    <Compile Include="InvisibleWindow.xaml.cs">
+    <Compile Include="HotKey\InvisibleWindow.xaml.cs">
       <DependentUpon>InvisibleWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Kernel.cs" />
@@ -119,7 +119,7 @@
     <Resource Include="Resources\revolver-icon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="InvisibleWindow.xaml">
+    <Page Include="HotKey\InvisibleWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -34,7 +34,7 @@ namespace NV.Magnum.App
             _icon = new TaskbarIcon
             {
                 DataContext = new ContextMenuViewModel(screenshotsFolder) {Kernel = new KernelViewModel(_kernel)},
-                Style = (Style) FindResource("TaryIconStyle")
+                Style = (Style) FindResource("TrayIconStyle")
             };
 
         }

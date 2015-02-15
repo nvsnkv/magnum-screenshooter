@@ -1,4 +1,4 @@
-﻿<Window x:Class="NV.Magnum.App.InvisibleWindow"
+﻿<Window x:Class="NV.Magnum.App.HotKey.InvisibleWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Top="10000" Left="10000" Width="0" Height="0"
