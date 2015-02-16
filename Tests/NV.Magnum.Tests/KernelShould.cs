@@ -19,6 +19,7 @@ namespace NV.Magnum.Tests
     {
         #region Setup
 
+        private const string WEB_ROOT = "http://UNIT_TEST:12345/";
         private class Mocks
         {
             public readonly Mock<IHotKeyMonitor> HotKeyMonitor = new Mock<IHotKeyMonitor>();
@@ -36,7 +37,7 @@ namespace NV.Magnum.Tests
         public void CreateKernel()
         {
             _mocks = new Mocks();
-            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object, _mocks.Storage.Object, _mocks.Server.Object, _mocks.ClipboardManager.Object);
+            _kernel = new Kernel(_mocks.HotKeyMonitor.Object, _mocks.ScreenCatcher.Object, _mocks.Storage.Object, _mocks.Server.Object, _mocks.ClipboardManager.Object, WEB_ROOT);
         }
 
         [TearDown]
@@ -187,14 +188,14 @@ namespace NV.Magnum.Tests
             const string NAME = "Screenshot1";
 
             var manager = _mocks.ClipboardManager;
-            manager.Setup(m => m.Set(NAME)).Verifiable();
+            manager.Setup(m => m.Set(WEB_ROOT + NAME)).Verifiable();
 
             var storage = _mocks.Storage;
             _kernel.Start();
 
             storage.Raise(s => s.ScreenshotStored += null, new ScreenshotStoredEventArgs(NAME));
 
-            manager.Verify(m => m.Set(NAME), Times.Once);
+            manager.Verify(m => m.Set(WEB_ROOT + NAME), Times.Once);
         }
 
         [Test, Category("Clipboard")]
@@ -203,13 +204,13 @@ namespace NV.Magnum.Tests
             const string NAME = "Screenshot1";
 
             var manager = _mocks.ClipboardManager;
-            manager.Setup(m => m.Set(NAME)).Verifiable();
+            manager.Setup(m => m.Set(WEB_ROOT + NAME)).Verifiable();
 
             var storage = _mocks.Storage;
             
             storage.Raise(s => s.ScreenshotStored += null, new ScreenshotStoredEventArgs(NAME));
 
-            manager.Verify(m => m.Set(NAME), Times.Never);
+            manager.Verify(m => m.Set(WEB_ROOT + NAME), Times.Never);
         }
     }
 }

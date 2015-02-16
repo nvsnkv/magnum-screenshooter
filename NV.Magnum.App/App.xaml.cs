@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Net;
+using System.Net.NetworkInformation;
 using System.Windows;
 using Hardcodet.Wpf.TaskbarNotification;
+using NV.Magnum.App.Clipboard;
 using NV.Magnum.App.HotKey;
 using NV.Magnum.App.Screen;
 using NV.Magnum.App.Server;
@@ -45,14 +48,33 @@ namespace NV.Magnum.App
             hotkeyWindow.Initialize();
 
             var monitor = new HotKeyMonitor(hotkeyWindow);
-            
+
+            if (!Path.IsPathRooted(screenshotsFolder))
+                screenshotsFolder = Path.Combine(Environment.CurrentDirectory, screenshotsFolder);
+
             if (!Directory.Exists(screenshotsFolder))
                 Directory.CreateDirectory(screenshotsFolder);
 
             var fileStorage = new FileStorage(screenshotsFolder);
 
-            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage, new EmbedIOServer(port, screenshotsFolder), null);
+            var hostName = GetFullyQuantifiedDomainName();
+            var webRoot = string.Format("http://{0}:{1}/", hostName, port);
+
+            _kernel = new Kernel(monitor, new ScreenCather(), fileStorage, new AsyncServer(port, screenshotsFolder,"+",4), new ClipboardManager(), webRoot);
             _kernel.Start();
+        }
+
+        private string GetFullyQuantifiedDomainName()
+        {
+            var domainName = IPGlobalProperties.GetIPGlobalProperties().DomainName;
+            var hostName = Dns.GetHostName();
+
+            if (!hostName.EndsWith(domainName))  
+            {
+                hostName += "." + domainName;   
+            }
+
+            return hostName;   
         }
 
         protected override void OnExit(ExitEventArgs e)

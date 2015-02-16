@@ -38,9 +38,6 @@
     <Reference Include="Hardcodet.Wpf.TaskbarNotification">
       <HintPath>..\packages\Hardcodet.NotifyIcon.Wpf.1.0.5\lib\net45\Hardcodet.Wpf.TaskbarNotification.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\packages\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Practices.Prism.Mvvm">
       <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
       <Private>True</Private>
@@ -50,10 +47,6 @@
     </Reference>
     <Reference Include="Microsoft.Practices.Prism.SharedInterfaces">
       <HintPath>..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -66,9 +59,6 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="Unosquare.Labs.EmbedIO">
-      <HintPath>..\packages\EmbedIO.1.0.0\lib\Unosquare.Labs.EmbedIO.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -83,13 +73,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Clipboard\ClipboardManager.cs" />
     <Compile Include="Clipboard\IClipboardManager.cs" />
     <Compile Include="Screen\IScreenCather.cs" />
     <Compile Include="Screen\IScreenshot.cs" />
     <Compile Include="Screen\ScreenCather.cs" />
     <Compile Include="Screen\Screenshot.cs" />
     <Compile Include="Screen\ScreenshotCreatedEventArgs.cs" />
-    <Compile Include="Server\EmbedIOServer.cs" />
+    <Compile Include="Server\AsyncServer.cs" />
     <Compile Include="Server\IServer.cs" />
     <Compile Include="Storage\FileStorage.cs" />
     <Compile Include="Storage\IStorage.cs" />
