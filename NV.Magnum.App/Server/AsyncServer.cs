@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using PostSharp.Patterns.Diagnostics;
+using PostSharp.Extensibility;
 
 namespace NV.Magnum.App.Server
 {
@@ -65,6 +67,7 @@ namespace NV.Magnum.App.Server
 
         }
 
+        [LogException]
         public void Stop()
         {
             if (!_listener.IsListening)
@@ -73,6 +76,7 @@ namespace NV.Magnum.App.Server
             _listener.Stop();
         }
 
+        [Log]
         private void ProcessRequest(HttpListenerContext context)
         {
             var request = context.Request;
@@ -86,6 +90,7 @@ namespace NV.Magnum.App.Server
             }
         }
 
+        [Log]
         private void RespondFile(string absolutePath, HttpListenerResponse response)
         {
             var file = new FileInfo(Path.Combine(_wwwRoot, absolutePath));
@@ -97,12 +102,14 @@ namespace NV.Magnum.App.Server
             }
         }
 
+        [Log]
         private void RespondError(HttpListenerResponse response)
         {
             response.StatusCode = 404;
             response.Close();
         }
 
+        [LogException]
         private bool CheckRequest(HttpListenerRequest request)
         {
             return request.HttpMethod.ToUpperInvariant() == "GET" 
